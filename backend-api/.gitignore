@@ -1,0 +1,173 @@
+# ==============================
+# Dependencies
+# ==============================
+node_modules/
+**/node_modules/
+
+# ==============================
+# Build outputs
+# ==============================
+dist/
+**/dist/
+build/
+**/build/
+out/
+**/out/
+.next/
+**/.next/
+.expo/
+**/.expo/
+.expo-shared/
+**/.expo-shared/
+
+# ==============================
+# Environment files / secrets
+# Keep .env.example files, ignore real env files
+# ==============================
+.env
+.env.*
+**/.env
+**/.env.*
+!.env.example
+!**/.env.example
+
+# ==============================
+# Local databases
+# ==============================
+dev.db
+**/dev.db
+*.db
+*.sqlite
+*.sqlite3
+**/*.db
+**/*.sqlite
+**/*.sqlite3
+
+# ==============================
+# Logs
+# ==============================
+*.log
+**/*.log
+npm-debug.log*
+yarn-debug.log*
+pnpm-debug.log*
+lerna-debug.log*
+
+# ==============================
+# OS files
+# ==============================
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# ==============================
+# Editor / IDE files
+# ==============================
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# ==============================
+# TypeScript / JavaScript cache
+# ==============================
+*.tsbuildinfo
+**/*.tsbuildinfo
+.cache/
+**/.cache/
+
+# ==============================
+# Prisma generated/cache files
+# Keep schema and migrations, ignore local generated engine/cache if present
+# ==============================
+**/.prisma/client/
+**/node_modules/.prisma/
+**/node_modules/@prisma/engines/
+**/node_modules/@prisma/client/runtime/
+
+# Do NOT ignore these important Prisma files:
+!backend-api/prisma/schema.prisma
+!backend-api/prisma/migrations/
+!backend-api/prisma/migrations/**
+
+# ==============================
+# Expo / React Native / Mobile App
+# ==============================
+mobile-app/.expo/
+mobile-app/.expo-shared/
+mobile-app/android/.gradle/
+mobile-app/android/app/build/
+mobile-app/ios/Pods/
+mobile-app/ios/build/
+
+# Keep mobile env example
+!mobile-app/.env.example
+
+# ==============================
+# Antigravity / local assistant folders
+# ==============================
+.antigravity/
+**/.antigravity/
+
+# Claude / local assistant settings
+.claude/
+**/.claude/
+
+# ==============================
+# Submission zip/build artifacts
+# ==============================
+*.zip
+*.rar
+*.7z
+mobile-app.zip
+antigravity-trace-logs.zip
+
+# ==============================
+# Temporary files
+# ==============================
+tmp/
+temp/
+**/tmp/
+**/temp/
+
+# ==============================
+# Coverage / test artifacts
+# ==============================
+coverage/
+**/coverage/
+.nyc_output/
+**/.nyc_output/
+
+# ==============================
+# Keep important documentation
+# ==============================
+!README.md
+!CURRENT_STATUS.md
+!project-structure.txt
+!docs/
+!docs/**
+!implementation_plan-phase2
+
+# ==============================
+# Keep important source/data files
+# ==============================
+!backend-api/package.json
+!backend-api/package-lock.json
+!backend-api/tsconfig.json
+!backend-api/prisma.config.ts
+!backend-api/.env.example
+!backend-api/data/
+!backend-api/data/**
+!backend-api/scripts/
+!backend-api/scripts/**
+!backend-api/src/
+!backend-api/src/**
+
+!mobile-app/package.json
+!mobile-app/package-lock.json
+!mobile-app/tsconfig.json
+!mobile-app/app.json
+!mobile-app/App.tsx
+!mobile-app/index.ts
+!mobile-app/AGENTS.md
+!mobile-app/CLAUDE.md

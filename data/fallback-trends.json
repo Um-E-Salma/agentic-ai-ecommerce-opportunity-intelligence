@@ -1,0 +1,29 @@
+[
+  {
+    "id": "trend-1",
+    "category": "Home organization",
+    "keyword": "Clear makeup organizers",
+    "signal": "High interest among budget shoppers",
+    "confidence": 0.85,
+    "evidence": "Mentioned in recent market reports",
+    "riskLevel": "LOW"
+  },
+  {
+    "id": "trend-2",
+    "category": "Women accessories",
+    "keyword": "Travel jewelry cases",
+    "signal": "Gaining attention for summer travel",
+    "confidence": 0.8,
+    "evidence": "Social media buzz",
+    "riskLevel": "LOW"
+  },
+  {
+    "id": "trend-3",
+    "category": "Home organization",
+    "keyword": "Compact kitchen storage",
+    "signal": "Demand for small space solutions",
+    "confidence": 0.75,
+    "evidence": "Search volume increasing",
+    "riskLevel": "MEDIUM"
+  }
+]

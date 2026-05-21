@@ -1,0 +1,20 @@
+[
+  {
+    "id": "lead-1",
+    "name": "John Doe",
+    "email": "john@example.com",
+    "interest": "Home organization"
+  },
+  {
+    "id": "lead-2",
+    "name": "Jane Smith",
+    "email": "jane@example.com",
+    "interest": "Fashion accessories"
+  },
+  {
+    "id": "lead-3",
+    "name": "Bob Johnson",
+    "email": "bob@example.com",
+    "interest": "Kitchen accessories"
+  }
+]

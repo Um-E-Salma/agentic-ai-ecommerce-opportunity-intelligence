@@ -1,0 +1,462 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id        String   @id @default(uuid())
+  name      String
+  email     String   @unique
+  createdAt DateTime @default(now())
+}
+
+model UnstructuredInput {
+  id        String     @id @default(uuid())
+  type      String // e.g., "TEXT", "URL"
+  content   String
+  urls      String? // JSON array or comma-separated
+  createdAt DateTime   @default(now())
+  AgentRun  AgentRun[]
+}
+
+model AgentRun {
+  id                 String               @id @default(uuid())
+  inputId            String
+  status             String // "PENDING", "RUNNING", "COMPLETED", "FAILED"
+  startedAt          DateTime             @default(now())
+  completedAt        DateTime?
+  selectedCategories String? // JSON array
+  sourceMode         String? // "ACTUAL", "FALLBACK", "MIXED"
+  notes              String?
+  input              UnstructuredInput    @relation(fields: [inputId], references: [id])
+  AgentTask          AgentTask[]
+  AgentHandoff       AgentHandoff[]
+  ExtractedInsight   ExtractedInsight[]
+  ProductOpportunity ProductOpportunity[]
+  AgentTraceLog      AgentTraceLog[]
+  AnalyticsSnapshot  AnalyticsSnapshot[]
+  CampaignDraft      CampaignDraft[]
+}
+
+model AgentTask {
+  id            String    @id @default(uuid())
+  runId         String
+  agentName     String
+  taskType      String
+  status        String // "PENDING", "RUNNING", "COMPLETED", "FAILED"
+  inputSummary  String?
+  outputSummary String?
+  decision      String?
+  toolUsed      String?
+  startedAt     DateTime  @default(now())
+  completedAt   DateTime?
+  logs          String? // Detailed logs
+  run           AgentRun  @relation(fields: [runId], references: [id])
+}
+
+model AgentHandoff {
+  id             String   @id @default(uuid())
+  runId          String
+  fromAgent      String
+  toAgent        String
+  payloadSummary String?
+  status         String // "PENDING", "COMPLETED"
+  createdAt      DateTime @default(now())
+  run            AgentRun @relation(fields: [runId], references: [id])
+}
+
+model ExtractedInsight {
+  id             String           @id @default(uuid())
+  runId          String
+  title          String
+  category       String
+  keyword        String
+  signal         String
+  confidence     Float
+  evidence       String
+  riskLevel      String // "LOW", "MEDIUM", "HIGH"
+  createdAt      DateTime         @default(now())
+  run            AgentRun         @relation(fields: [runId], references: [id])
+  ImpactAnalysis ImpactAnalysis[]
+}
+
+model ImpactAnalysis {
+  id               String           @id @default(uuid())
+  runId            String
+  insightId        String
+  whyItMatters     String
+  businessImpact   String
+  riskLevel        String // "LOW", "MEDIUM", "HIGH"
+  affectedCategory String
+  createdAt        DateTime         @default(now())
+  insight          ExtractedInsight @relation(fields: [insightId], references: [id])
+}
+
+model ProductOpportunity {
+  id                         String                  @id @default(uuid())
+  runId                      String
+  sourceProductId            String
+  title                      String
+  brand                      String?
+  category                   String
+  sourcePlatform             String
+  sourceUrl                  String?
+  imageUrl                   String?
+  sourcePrice                Float
+  shippingCost               Float
+  condition                  String?
+  availability               String?
+  currency                   String                  @default("USD")
+  estimatedSellingPrice      Float
+  marketplace                String
+  marketplaceListingTitle    String?
+  marketplaceListingUrl      String?
+  matchScore                 Float
+  matchReason                String?
+  usedSearchTerms            String? // JSON array
+  sourceMode                 String? // "auto", "shopify_dev", "fallback_demo"
+  comparisonConfidence       Float
+  totalCost                  Float
+  totalFees                  Float
+  netProfit                  Float
+  roiPercent                 Float
+  marginPercent              Float
+  profitGate                 String // "PASS", "REVIEW", "FAIL"
+  aiDecision                 String // "STRONG_CANDIDATE", "REVIEW", "SKIP"
+  aiConfidence               Float
+  riskLevel                  String // "LOW", "MEDIUM", "HIGH"
+  aiReason                   String?
+  warnings                   String? // JSON array
+  recommendedAction          String?
+  status                     String // "PENDING", "APPROVED", "REJECTED"
+  createdAt                  DateTime                @default(now())
+  run                        AgentRun                @relation(fields: [runId], references: [id])
+  RecommendedAction          RecommendedAction[]
+  SimulatedAction            SimulatedAction[]
+  PurchaseCandidate          PurchaseCandidate[]
+  NotificationDraft          NotificationDraft[]
+  ListingRecommendation      ListingRecommendation[]
+  DemoListing                DemoListing[]
+}
+
+model RecommendedAction {
+  id              String             @id @default(uuid())
+  runId           String
+  opportunityId   String
+  actionType      String
+  reason          String
+  expectedOutcome String?
+  status          String // "PENDING", "EXECUTED"
+  createdAt       DateTime           @default(now())
+  opportunity     ProductOpportunity @relation(fields: [opportunityId], references: [id])
+}
+
+model SimulatedAction {
+  id            String             @id @default(uuid())
+  runId         String
+  opportunityId String
+  actionType    String
+  status        String // "SUCCESS", "FAILED"
+  beforeState   String? // JSON summary
+  afterState    String? // JSON summary
+  logs          String?
+  createdAt     DateTime           @default(now())
+  opportunity   ProductOpportunity @relation(fields: [opportunityId], references: [id])
+}
+
+model PurchaseCandidate {
+  id                    String              @id @default(uuid())
+  opportunityId         String
+  status                String // NEW, NOTIFIED, REVIEW_REQUIRED, APPROVED_TO_BUY, REJECTED, OPENED_FOR_MANUAL_PURCHASE, PURCHASED_MANUALLY, EXPIRED
+  sourceUrl             String?
+  projectedProfit       Float
+  roiPercent            Float
+  approvedAt            DateTime?
+  rejectedAt            DateTime?
+  openedAt              DateTime?
+  purchasedManuallyAt   DateTime?
+  notes                 String?
+  createdAt             DateTime            @default(now())
+  updatedAt             DateTime            @updatedAt
+  opportunity           ProductOpportunity  @relation(fields: [opportunityId], references: [id])
+  PurchaseActionLog     PurchaseActionLog[]
+  DemoListing           DemoListing[]
+}
+
+model NotificationDraft {
+  id            String             @id @default(uuid())
+  opportunityId String
+  channel       String // TELEGRAM, EMAIL, WHATSAPP_MOCK
+  subject       String?
+  body          String
+  status        String // DRAFT, SENT, FAILED, MOCK_CREATED, TELEGRAM_NOT_CONFIGURED, EMAIL_NOT_CONFIGURED
+  errorMessage  String?
+  sentAt        DateTime?
+  createdAt     DateTime           @default(now())
+  opportunity   ProductOpportunity @relation(fields: [opportunityId], references: [id])
+}
+
+model PurchaseActionLog {
+  id           String            @id @default(uuid())
+  candidateId  String
+  action       String // APPROVE, REJECT, OPEN_SOURCE_PAGE, MARK_PURCHASED
+  statusBefore String
+  statusAfter  String
+  notes        String?
+  createdAt    DateTime          @default(now())
+  candidate    PurchaseCandidate @relation(fields: [candidateId], references: [id])
+}
+
+model NotificationSettings {
+  id                  String   @id @default(uuid())
+  telegramEnabled     Boolean  @default(false)
+  emailEnabled        Boolean  @default(false)
+  whatsappMockEnabled Boolean  @default(false)
+  emailTo             String?
+  whatsappTestNumber  String?
+  updatedAt           DateTime @updatedAt
+}
+
+model ListingRecommendation {
+  id                  String             @id @default(uuid())
+  opportunityId       String
+  recommendedPlatform String // "eBay Sandbox", "Shopify Development Store", etc.
+  title               String
+  description         String
+  tags                String? // JSON array
+  recommendedPrice    Float
+  expectedProfit      Float
+  reason              String?
+  status              String // "DRAFT", "PUBLISHED"
+  createdAt           DateTime           @default(now())
+  opportunity         ProductOpportunity @relation(fields: [opportunityId], references: [id])
+}
+
+model CampaignDraft {
+  id                     String   @id @default(uuid())
+  runId                  String
+  opportunityId          String?
+  campaignName           String
+  targetSegment          String // "demo or opted-in leads only"
+  channel                String // "EMAIL"
+  subject                String?
+  body                   String
+  discountRecommendation String?
+  status                 String // "DRAFT", "SENT"
+  createdAt              DateTime @default(now())
+  run                    AgentRun @relation(fields: [runId], references: [id])
+}
+
+model AgentTraceLog {
+  id            String   @id @default(uuid())
+  runId         String
+  agentName     String
+  stepName      String
+  stepType      String
+  inputSummary  String?
+  outputSummary String?
+  toolUsed      String?
+  status        String
+  createdAt     DateTime @default(now())
+  run           AgentRun @relation(fields: [runId], references: [id])
+}
+
+model AnalyticsSnapshot {
+  id                    String   @id @default(uuid())
+  runId                 String
+  totalInputsAnalyzed   Int
+  insightsExtracted     Int
+  opportunitiesFound    Int
+  strongCandidates      Int
+  reviewCandidates      Int
+  skippedProducts       Int
+  projectedProfit       Float
+  averageRoi            Float
+  bestCategory          String?
+  trendStatus           String?
+  recommendedNextAction String?
+  createdAt             DateTime @default(now())
+  run                   AgentRun @relation(fields: [runId], references: [id])
+}
+
+model Settings {
+  id                         String   @id @default(uuid())
+  minRoiForReview            Float    @default(5.0)
+  minRoiForStrongCandidate   Float    @default(20.0)
+  minNetProfit               Float    @default(5.0)
+  minMatchScore              Float    @default(0.75)
+  marketplaceFeePercent      Float    @default(13.25)
+  paymentFeePercent          Float    @default(2.9)
+  fixedTransactionFee        Float    @default(0.30)
+  packagingCost              Float    @default(1.00)
+  returnReserve              Float    @default(2.00)
+  estimatedShippingToBuyer   Float    @default(5.00)
+  riskTolerance              String   @default("MEDIUM")
+  geminiModel                String   @default("gemini-2.5-flash")
+  dataSourceMode             String   @default("actual_with_fallback")
+  updatedAt                  DateTime @updatedAt
+}
+
+model PlatformConnection {
+  id              String   @id @default(uuid())
+  platform        String   @unique // "ebay_sandbox", "shopify_dev", "woocommerce_test"
+  mode            String   // "sandbox", "test", "development"
+  configured      Boolean  @default(false)
+  lastTestStatus  String?  // "SUCCESS", "FAILED"
+  lastTestMessage String?
+  lastTestedAt    DateTime?
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+}
+
+model DemoListing {
+  id                String             @id @default(uuid())
+  opportunityId     String?
+  candidateId       String?
+  platform          String             // e.g., "ebay_sandbox", "mock"
+  externalListingId String?
+  listingUrl        String?
+  title             String
+  description       String
+  tags              String?
+  category          String?
+  recommendedPrice  Float
+  expectedProfit    Float
+  status            String             // "DRAFT", "READY_FOR_REVIEW", "MOCK_LISTING_CREATED", "SANDBOX_LISTING_CREATED", "FAILED", "ARCHIVED"
+  errorMessage      String?
+  latestQualityScore Float?
+  createdAt         DateTime           @default(now())
+  updatedAt         DateTime           @updatedAt
+  opportunity       ProductOpportunity? @relation(fields: [opportunityId], references: [id])
+  candidate         PurchaseCandidate?  @relation(fields: [candidateId], references: [id])
+  ListingActionLog  ListingActionLog[]
+  ListingOptimization ListingOptimization[]
+  PricingRecommendation PricingRecommendation[]
+}
+
+model ListingActionLog {
+  id           String      @id @default(uuid())
+  listingId    String
+  action       String
+  statusBefore String
+  statusAfter  String
+  message      String?
+  createdAt    DateTime    @default(now())
+  listing      DemoListing @relation(fields: [listingId], references: [id])
+}
+
+model ListingOptimization {
+  id                   String      @id @default(uuid())
+  listingId            String
+  originalTitle        String
+  optimizedTitle       String
+  originalDescription  String
+  optimizedDescription String
+  originalTags         String?
+  optimizedTags        String?
+  originalPrice        Float
+  optimizedPrice       Float
+  oldQualityScore      Float
+  newQualityScore      Float
+  improvementSummary   String?
+  warnings             String?
+  status               String      // "DRAFT", "APPLIED", "REVERTED", "ARCHIVED"
+  createdAt            DateTime    @default(now())
+  updatedAt            DateTime    @updatedAt
+  listing              DemoListing @relation(fields: [listingId], references: [id])
+}
+
+model PricingRecommendation {
+  id             String      @id @default(uuid())
+  listingId      String
+  strategy       String      // "AGGRESSIVE", "BALANCED", "PREMIUM"
+  price          Float
+  expectedProfit Float
+  roiPercent     Float
+  marginPercent  Float
+  riskLevel      String      // "LOW", "MEDIUM", "HIGH"
+  reason         String?
+  createdAt      DateTime    @default(now())
+  listing        DemoListing @relation(fields: [listingId], references: [id])
+}
+
+model Lead {
+  id            String   @id @default(uuid())
+  name          String
+  email         String
+  phone         String?
+  source        String   // "DEMO", "OPTED_IN_TEST", "SEED"
+  consentStatus String   // "OPTED_IN_TEST", "DEMO_ONLY"
+  tags          String?  // JSON array
+  createdAt     DateTime @default(now())
+}
+
+model Campaign {
+  id                   String                    @id @default(uuid())
+  name                 String
+  campaignType         String                    // "DISCOUNT", "PROMOTION", "A_B_TEST", "BUNDLE", "PAUSE_PRODUCT", "COLLECT_MORE_DATA"
+  listingId            String?
+  opportunityId        String?
+  channel              String                    // "email", "whatsapp_mock", "in_app"
+  targetSegment        String                    // "demo_or_opted_in_leads"
+  subject              String?
+  body                 String
+  discountPercent      Float?
+  status               String                    // "DRAFT", "SIMULATED", "BLOCKED", "ARCHIVED"
+  complianceNote       String?
+  confidenceLevel      String                    // "LOW", "MEDIUM", "GOOD", "HIGH"
+  riskLevel            String                    // "LOW", "MEDIUM", "HIGH"
+  analysisWindow       String                    // "1d", "3d", "7d", "14d", "30d", "custom"
+  geminiReason         String?                   // Gemini's reasoning for this campaign
+  safetyGateResult     String?                   // "PASSED", "MODIFIED", "BLOCKED"
+  safetyGateNotes      String?                   // JSON array of safety notes
+  createdAt            DateTime                  @default(now())
+  updatedAt            DateTime                  @updatedAt
+  CampaignSimulation   CampaignSimulationResult[]
+}
+
+model CampaignSimulationResult {
+  id                    String   @id @default(uuid())
+  campaignId            String
+  expectedReach         Int
+  projectedClicks       Int
+  projectedConversions  Int
+  projectedRevenue      Float
+  projectedProfit       Float
+  beforeState           String?  // JSON summary
+  afterState            String?  // JSON summary
+  createdAt             DateTime @default(now())
+  campaign              Campaign @relation(fields: [campaignId], references: [id])
+}
+
+model BusinessStrategySnapshot {
+  id                    String   @id @default(uuid())
+  trendStatus           String   // "GROWING", "STABLE", "DECLINING", "INSUFFICIENT_DATA"
+  analysisStatus        String   // "INSUFFICIENT_DATA", "PRELIMINARY_ANALYSIS", "FULL_ANALYSIS", "STRONG_TREND_ANALYSIS"
+  confidenceLevel       String   // "LOW", "MEDIUM", "GOOD", "HIGH"
+  businessHealthScore   Int      // 0-100
+  dataStartDate         DateTime
+  dataEndDate           DateTime
+  daysAnalyzed          Int
+  totalEventsInWindow   Int
+  totalProjectedProfit  Float
+  averageRoi            Float
+  topCategory           String?
+  bestListingId         String?
+  keyInsights           String?  // JSON array
+  recommendedNextAction String?
+  riskWarnings          String?  // JSON array
+  createdAt             DateTime @default(now())
+}
+
+model StrategyActionLog {
+  id        String   @id @default(uuid())
+  action    String
+  context   String?  // JSON: campaign ID, snapshot ID, etc.
+  message   String?
+  createdAt DateTime @default(now())
+}

@@ -1,0 +1,29 @@
+[
+  {
+    "sourceProductId": "demo-1",
+    "marketplace": "eBay",
+    "listingTitle": "Wireless Noise Cancelling Headphones Premium",
+    "listingUrl": "https://www.ebay.com/demo/headphones",
+    "price": 89.99,
+    "matchScore": 0.85,
+    "confidence": 0.80
+  },
+  {
+    "sourceProductId": "demo-2",
+    "marketplace": "eBay",
+    "listingTitle": "Smart LED Strip Lights 10 Meter RGB",
+    "listingUrl": "https://www.ebay.com/demo/led",
+    "price": 28.99,
+    "matchScore": 0.80,
+    "confidence": 0.75
+  },
+  {
+    "sourceProductId": "demo-3",
+    "marketplace": "eBay",
+    "listingTitle": "Waterproof Bluetooth Speaker Portable Outdoor",
+    "listingUrl": "https://www.ebay.com/demo/speaker",
+    "price": 49.99,
+    "matchScore": 0.82,
+    "confidence": 0.78
+  }
+]

@@ -1,0 +1,34 @@
+[
+  {
+    "keyword": "skateboard",
+    "category": "Sports & Outdoors",
+    "trendScore": 0.82,
+    "demandLevel": "HIGH",
+    "evidence": ["Rising social media mentions", "TikTok skateboard trend 2024"],
+    "riskLevel": "LOW"
+  },
+  {
+    "keyword": "jewelry",
+    "category": "Fashion & Accessories",
+    "trendScore": 0.78,
+    "demandLevel": "HIGH",
+    "evidence": ["Consistent eBay demand", "Women fashion trending"],
+    "riskLevel": "LOW"
+  },
+  {
+    "keyword": "home organization",
+    "category": "Home & Garden",
+    "trendScore": 0.75,
+    "demandLevel": "HIGH",
+    "evidence": ["Amazon bestseller list", "Search volume increase"],
+    "riskLevel": "LOW"
+  },
+  {
+    "keyword": "snowboard",
+    "category": "Winter Sports",
+    "trendScore": 0.70,
+    "demandLevel": "MEDIUM",
+    "evidence": ["Seasonal demand", "Premium market"],
+    "riskLevel": "MEDIUM"
+  }
+]

@@ -1,0 +1,47 @@
+[
+  {
+    "id": "demo-1",
+    "sourceProductId": "demo-1",
+    "title": "Wireless Noise Cancelling Headphones",
+    "category": "Electronics",
+    "brand": "SoundTech",
+    "sourcePrice": 45.00,
+    "shippingCost": 5.00,
+    "condition": "New",
+    "availability": "In Stock",
+    "currency": "USD",
+    "sourcePlatform": "Demo Wholesale",
+    "sourceUrl": "https://demo.example.com/products/headphones",
+    "imageUrl": null
+  },
+  {
+    "id": "demo-2",
+    "sourceProductId": "demo-2",
+    "title": "Smart Home LED Strip Lights 10m",
+    "category": "Home & Garden",
+    "brand": "LightTech",
+    "sourcePrice": 12.50,
+    "shippingCost": 3.00,
+    "condition": "New",
+    "availability": "In Stock",
+    "currency": "USD",
+    "sourcePlatform": "Demo Wholesale",
+    "sourceUrl": "https://demo.example.com/products/led-strips",
+    "imageUrl": null
+  },
+  {
+    "id": "demo-3",
+    "sourceProductId": "demo-3",
+    "title": "Portable Bluetooth Speaker Waterproof",
+    "category": "Electronics",
+    "brand": "SoundWave",
+    "sourcePrice": 22.00,
+    "shippingCost": 4.00,
+    "condition": "New",
+    "availability": "In Stock",
+    "currency": "USD",
+    "sourcePlatform": "Demo Wholesale",
+    "sourceUrl": "https://demo.example.com/products/speaker",
+    "imageUrl": null
+  }
+]
