@@ -645,7 +645,6 @@ For safe sharing, use:
 backend-api/.env.example
 ```
 
-Do not push `.env` to GitHub.
 
 ---
 
@@ -654,8 +653,8 @@ Do not push `.env` to GitHub.
 ### 1. Clone the Repository
 
 ```bash
-git clone https://github.com/YOUR_USERNAME/YOUR_REPO_NAME.git
-cd YOUR_REPO_NAME
+git clone https://github.com/Um-E-Salma/agentic-ai-ecommerce-opportunity-intelligence.git
+cd agentic-ai-ecommerce-opportunity-intelligence
 ```
 
 ---
